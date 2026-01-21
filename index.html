@@ -1,65 +1,375 @@
-<script>
-const canvas = document.getElementById("codeRain");
-const ctx = canvas.getContext("2d");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #f8fafc;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        /* Canvas as background */
+        #codeRain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        /* Overlay for better text readability */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(2, 6, 23, 0.85), rgba(15, 23, 42, 0.7));
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        /* Content container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Header styles */
+        header {
+            padding: 2rem 0;
+            text-align: center;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #7dd3fc;
+            text-shadow: 0 0 10px rgba(125, 211, 252, 0.5);
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            color: #cbd5e1;
+            margin-bottom: 2rem;
+        }
+        
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .nav-link {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: #38bdf8;
+            background: rgba(56, 189, 248, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        /* Main content */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            margin-bottom: 3rem;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            color: #f8fafc;
+        }
+        
+        .highlight {
+            color: #38bdf8;
+            text-shadow: 0 0 15px rgba(56, 189, 248, 0.7);
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            line-height: 1.6;
+            color: #cbd5e1;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        
+        /* Skills section */
+        .skills {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .skill-card {
+            background: rgba(15, 23, 42, 0.7);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .skill-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(56, 189, 248, 0.4);
+        }
+        
+        .skill-card h3 {
+            color: #38bdf8;
+            margin-bottom: 1rem;
+        }
+        
+        /* CTA Button */
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+            color: white;
+            padding: 1rem 2.5rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(14, 165, 233, 0.4);
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(56, 189, 248, 0.1);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            nav {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Python Code Rain Canvas -->
+    <canvas id="codeRain"></canvas>
+    <div class="overlay"></div>
+    
+    <!-- Main Content -->
+    <div class="container">
+        <header>
+            <div class="logo">PYTHON DEV</div>
+            <p class="tagline">Full-Stack Developer & Python Enthusiast</p>
+            <nav>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#projects" class="nav-link">Projects</a>
+                <a href="#skills" class="nav-link">Skills</a>
+                <a href="#experience" class="nav-link">Experience</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </nav>
+        </header>
+        
+        <main>
+            <section class="hero">
+                <h1>Building the Future with <span class="highlight">Python</span></h1>
+                <p>I specialize in creating robust web applications using Django, FastAPI, and modern JavaScript frameworks. Passionate about clean code, scalable architecture, and innovative solutions.</p>
+                <a href="#contact" class="cta-button">Get in Touch</a>
+            </section>
+            
+            <section id="skills" class="skills">
+                <div class="skill-card">
+                    <h3>Backend Development</h3>
+                    <p>Django, FastAPI, Flask, PostgreSQL, REST APIs, GraphQL</p>
+                </div>
+                <div class="skill-card">
+                    <h3>Frontend Development</h3>
+                    <p>React, Vue.js, TypeScript, Tailwind CSS, Webpack</p>
+                </div>
+                <div class="skill-card">
+                    <h3>DevOps & Cloud</h3>
+                    <p>Docker, AWS, CI/CD, Nginx, Linux, Kubernetes</p>
+                </div>
+                <div class="skill-card">
+                    <h3>Data Science</h3>
+                    <p>Pandas, NumPy, Scikit-learn, Jupyter, Data Visualization</p>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>&copy; 2024 Python Developer Portfolio. All rights reserved.</p>
+            <p>Made with ❤️ and lots of Python code</p>
+        </footer>
+    </div>
 
-function resize() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-resize();
-window.addEventListener("resize", resize);
+    <script>
+        const canvas = document.getElementById("codeRain");
+        const ctx = canvas.getContext("2d");
 
-// Python-heavy snippets (longer = more visible)
-const python = [
-  "def main():",
-  "class User(models.Model):",
-  "import django",
-  "from django.urls import path",
-  "return HttpResponse()",
-  "if request.method == 'POST':",
-  "for i in range():",
-  "while True:",
-  "try:",
-  "except Exception:",
-  "self.request",
-  "__init__",
-  "models.Model",
-  "views.py",
-  "urls.py",
-  "render(request)",
-  "QuerySet",
-  "print('Hello World')"
-];
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            columns = Math.floor(canvas.width / fontSize);
+            drops = Array(columns).fill(1);
+        }
+        
+        resize();
+        window.addEventListener("resize", resize);
 
-const fontSize = 18; // BIGGER text
-let columns = Math.floor(canvas.width / fontSize);
-let drops = Array(columns).fill(1);
+        // Python-heavy snippets (longer = more visible)
+        const python = [
+            "def main():",
+            "class User(models.Model):",
+            "import django",
+            "from django.urls import path",
+            "return HttpResponse()",
+            "if request.method == 'POST':",
+            "for i in range():",
+            "while True:",
+            "try:",
+            "except Exception:",
+            "self.request",
+            "__init__",
+            "models.Model",
+            "views.py",
+            "urls.py",
+            "render(request)",
+            "QuerySet",
+            "print('Hello World')",
+            "async def main():",
+            "await asyncio.sleep()",
+            "@api_view(['GET'])",
+            "serializers.ModelSerializer",
+            "ListView.as_view()",
+            "Celery tasks",
+            "Redis cache",
+            "Django ORM",
+            "FastAPI",
+            "Pydantic models",
+            "async await",
+            "WebSocket",
+            "middleware",
+            "migrations",
+            "pytest fixtures",
+            "coverage report",
+            "black formatter",
+            "isort imports",
+            "flake8 linting",
+            "mypy typing",
+            "pre-commit hooks"
+        ];
 
-function draw() {
-  // Slower fade = longer trails
-  ctx.fillStyle = "rgba(2, 6, 23, 0.08)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+        const fontSize = 18; // BIGGER text
+        let columns = Math.floor(canvas.width / fontSize);
+        let drops = Array(columns).fill(1);
 
-  ctx.font = `bold ${fontSize}px monospace`;
+        function draw() {
+            // Slower fade = longer trails
+            ctx.fillStyle = "rgba(2, 6, 23, 0.08)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  for (let i = 0; i < drops.length; i++) {
-    const text = python[Math.floor(Math.random() * python.length)];
+            ctx.font = `bold ${fontSize}px 'Courier New', monospace`;
 
-    // GLOW EFFECT
-    ctx.shadowColor = "#38bdf8";
-    ctx.shadowBlur = 12;
-    ctx.fillStyle = "#7dd3fc";
+            for (let i = 0; i < drops.length; i++) {
+                const text = python[Math.floor(Math.random() * python.length)];
 
-    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                // GLOW EFFECT
+                ctx.shadowColor = "#38bdf8";
+                ctx.shadowBlur = 12;
+                ctx.fillStyle = "#7dd3fc";
 
-    if (drops[i] * fontSize > canvas.height && Math.random() > 0.95) {
-      drops[i] = 0;
-    }
-    drops[i]++;
-  }
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
-  ctx.shadowBlur = 0;
-}
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.95) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
 
-setInterval(draw, 35); // Faster = more rain
-</script>
+            ctx.shadowBlur = 0;
+        }
+
+        // Animation loop
+        let animationId;
+        function animate() {
+            draw();
+            animationId = requestAnimationFrame(animate);
+        }
+        animate();
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Optional: Pause animation when not in viewport to save resources
+        let isPageVisible = true;
+        document.addEventListener('visibilitychange', () => {
+            isPageVisible = !document.hidden;
+            if (isPageVisible) {
+                animate();
+            } else {
+                cancelAnimationFrame(animationId);
+            }
+        });
+    </script>
+</body>
+</html>
