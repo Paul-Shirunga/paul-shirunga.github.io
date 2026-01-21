@@ -1,562 +1,234 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Revenue Dashboard | Python Developer</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #f8fafc;
-            overflow-x: hidden;
-            position: relative;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        /* Canvas as background */
-        #codeRain {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
-        
-        /* Overlay for better text readability */
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, rgba(2, 6, 23, 0.9), rgba(15, 23, 42, 0.85));
-            z-index: -1;
-            pointer-events: none;
-        }
-        
-        /* Main container */
-        .dashboard-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-        
-        /* Header */
-        .dashboard-header {
-            text-align: center;
-            padding: 2rem 0;
-            margin-bottom: 2rem;
-        }
-        
-        .dashboard-header h1 {
-            font-size: 3rem;
-            margin-bottom: 0.5rem;
-            color: #38bdf8;
-            text-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
-        }
-        
-        .dashboard-header p {
-            color: #cbd5e1;
-            font-size: 1.2rem;
-        }
-        
-        /* Stats Summary Cards */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 3rem;
-        }
-        
-        .stat-card {
-            background: rgba(15, 23, 42, 0.7);
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            backdrop-filter: blur(10px);
-        }
-        
-        .stat-card h3 {
-            color: #94a3b8;
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .stat-card .value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #38bdf8;
-        }
-        
-        /* Table Container */
-        .table-container {
-            background: rgba(15, 23, 42, 0.8);
-            border-radius: 12px;
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            backdrop-filter: blur(10px);
-            padding: 2rem;
-            margin-bottom: 3rem;
-            overflow-x: auto;
-        }
-        
-        .table-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-        
-        .table-header h2 {
-            color: #f8fafc;
-            font-size: 1.8rem;
-        }
-        
-        .controls {
-            display: flex;
-            gap: 1rem;
-            align-items: center;
-        }
-        
-        .search-box {
-            padding: 0.7rem 1rem;
-            background: rgba(30, 41, 59, 0.8);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            border-radius: 8px;
-            color: #f8fafc;
-            font-size: 1rem;
-            min-width: 250px;
-        }
-        
-        .search-box:focus {
-            outline: none;
-            border-color: #38bdf8;
-            box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
-        }
-        
-        /* Table Styling */
-        .revenue-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 1rem;
-        }
-        
-        .revenue-table thead {
-            background: rgba(30, 41, 59, 0.9);
-        }
-        
-        .revenue-table th {
-            padding: 1rem;
-            text-align: left;
-            color: #38bdf8;
-            font-weight: 600;
-            border-bottom: 2px solid rgba(56, 189, 248, 0.3);
-        }
-        
-        .revenue-table td {
-            padding: 1rem;
-            border-bottom: 1px solid rgba(56, 189, 248, 0.1);
-            color: #e2e8f0;
-        }
-        
-        .revenue-table tbody tr:hover {
-            background: rgba(56, 189, 248, 0.1);
-            transition: background 0.2s ease;
-        }
-        
-        .revenue-table tbody tr:last-child td {
-            border-bottom: none;
-        }
-        
-        /* Pagination */
-        .pagination {
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            margin-top: 2rem;
-            flex-wrap: wrap;
-        }
-        
-        .page-btn {
-            padding: 0.5rem 1rem;
-            background: rgba(30, 41, 59, 0.8);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            border-radius: 6px;
-            color: #cbd5e1;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .page-btn:hover {
-            background: rgba(56, 189, 248, 0.2);
-            border-color: #38bdf8;
-        }
-        
-        .page-btn.active {
-            background: rgba(56, 189, 248, 0.3);
-            border-color: #38bdf8;
-            color: #38bdf8;
-            font-weight: 600;
-        }
-        
-        /* Footer */
-        .dashboard-footer {
-            text-align: center;
-            padding: 2rem;
-            color: #94a3b8;
-            font-size: 0.9rem;
-            border-top: 1px solid rgba(56, 189, 248, 0.1);
-            margin-top: 2rem;
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .dashboard-header h1 {
-                font-size: 2rem;
-            }
-            
-            .table-header {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .search-box {
-                min-width: 100%;
-            }
-            
-            .revenue-table {
-                font-size: 0.9rem;
-            }
-            
-            .revenue-table th,
-            .revenue-table td {
-                padding: 0.75rem 0.5rem;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khomotjo Paul Shirunga | Python Django Developer</title>
+
+<style>
+  :root {
+    --primary: #38bdf8;
+    --bg-dark: #020617;
+    --glass: rgba(15, 23, 42, 0.7);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    color: #e5e7eb;
+    background: radial-gradient(circle at top, #020617, #000);
+    overflow-x: hidden;
+  }
+
+  /* PYTHON CODE RAIN */
+  canvas {
+    position: fixed;
+    inset: 0;
+    z-index: -1;            /* behind content */
+    pointer-events: none;   /* never blocks clicks */
+    filter: brightness(1.4) contrast(1.3);
+  }
+
+  /* HERO */
+  header {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px;
+  }
+
+  header h1 {
+    font-size: 3.2rem;
+    margin: 0;
+    background: linear-gradient(90deg, #ffffff, var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  header p {
+    font-size: 1.2rem;
+    margin-top: 10px;
+    color: #cbd5f5;
+  }
+
+  .btn {
+    margin-top: 30px;
+    padding: 14px 32px;
+    border-radius: 30px;
+    background: linear-gradient(135deg, var(--primary), #0ea5e9);
+    color: #020617;
+    font-weight: bold;
+    text-decoration: none;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 35px rgba(56,189,248,0.7);
+  }
+
+  /* SECTIONS */
+  section {
+    max-width: 1000px;
+    margin: 80px auto;
+    padding: 40px;
+    background: var(--glass);
+    border-radius: 22px;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 0 50px rgba(0,0,0,0.7);
+    animation: fadeUp 1s ease forwards;
+  }
+
+  h2 {
+    color: var(--primary);
+    margin-bottom: 20px;
+  }
+
+  /* PROJECTS */
+  .project {
+    padding: 20px;
+    border-radius: 16px;
+    background: rgba(2,6,23,0.95);
+    margin-bottom: 20px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .project:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 0 35px rgba(56,189,248,0.45);
+  }
+
+  .project a {
+    color: var(--primary);
+    font-weight: bold;
+    text-decoration: none;
+    font-size: 1.1rem;
+  }
+
+  footer {
+    text-align: center;
+    padding: 40px;
+    color: #94a3b8;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
 </head>
+
 <body>
-    <!-- Python Code Rain Canvas -->
-    <canvas id="codeRain"></canvas>
-    <div class="overlay"></div>
-    
-    <!-- Dashboard Content -->
-    <div class="dashboard-container">
-        <header class="dashboard-header">
-            <h1>💰 Revenue Dashboard</h1>
-            <p>Interactive Python-themed revenue data visualization</p>
-        </header>
-        
-        <!-- Stats Summary -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3>Total Records</h3>
-                <div class="value" id="totalRecords">148</div>
-            </div>
-            <div class="stat-card">
-                <h3>Average Revenue</h3>
-                <div class="value" id="avgRevenue">$74,500</div>
-            </div>
-            <div class="stat-card">
-                <h3>Minimum Revenue</h3>
-                <div class="value" id="minRevenue">$1,000</div>
-            </div>
-            <div class="stat-card">
-                <h3>Maximum Revenue</h3>
-                <div class="value" id="maxRevenue">$148,000</div>
-            </div>
-        </div>
-        
-        <!-- Revenue Table -->
-        <div class="table-container">
-            <div class="table-header">
-                <h2>Revenue Data Table</h2>
-                <div class="controls">
-                    <input type="text" id="searchInput" class="search-box" placeholder="Search revenue...">
-                    <select id="itemsPerPage" class="search-box" style="min-width: auto; width: 120px;">
-                        <option value="10">10 per page</option>
-                        <option value="20" selected>20 per page</option>
-                        <option value="50">50 per page</option>
-                        <option value="100">100 per page</option>
-                    </select>
-                </div>
-            </div>
-            
-            <table class="revenue-table" id="revenueTable">
-                <thead>
-                    <tr>
-                        <th style="width: 60px;">#</th>
-                        <th>Category</th>
-                        <th style="text-align: right;">Revenue Value</th>
-                        <th style="text-align: center;">Progress</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    <!-- Data will be inserted here by JavaScript -->
-                </tbody>
-            </table>
-            
-            <!-- Pagination -->
-            <div class="pagination" id="pagination">
-                <!-- Pagination buttons will be inserted here -->
-            </div>
-        </div>
-        
-        <footer class="dashboard-footer">
-            <p>Revenue Dashboard • Powered by Python • Data Visualization Example</p>
-            <p>Total Revenue Analysis | Last updated: Today</p>
-        </footer>
-    </div>
 
-    <script>
-        // ======================
-        // Python Rain Background
-        // ======================
-        const canvas = document.getElementById("codeRain");
-        const ctx = canvas.getContext("2d");
+<!-- PYTHON CODE RAIN CANVAS -->
+<canvas id="codeRain"></canvas>
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        
-        resizeCanvas();
-        window.addEventListener("resize", resizeCanvas);
+<header>
+  <h1>Khomotjo Paul Shirunga</h1>
+  <p>Python & Django Developer | IT Professional</p>
+  <a href="cv.pdf" class="btn" target="_blank">Download CV</a>
+</header>
 
-        // Python-heavy snippets
-        const python = [
-            "def calculate_revenue():",
-            "class RevenueModel:",
-            "import pandas as pd",
-            "df = pd.DataFrame()",
-            "total = sum(revenues)",
-            "revenue_data = []",
-            "for record in data:",
-            "while calculating:",
-            "try: analyze()",
-            "except DataError:",
-            "self.revenue",
-            "__init__(self)",
-            "models.Model",
-            "analytics.py",
-            "data_visualization",
-            "revenue_report()",
-            "DataFrame",
-            "print('Revenue Analysis')",
-            "async def fetch_data():",
-            "await api_call()",
-            "@api_view(['GET'])",
-            "serialize_data()",
-            "ChartView.as_view()",
-            "data_tasks",
-            "cache_results",
-            "ORM queries",
-            "FastAPI endpoints",
-            "data_models",
-            "async analytics",
-            "WebSocket updates",
-            "data_middleware",
-            "data_migrations",
-            "pytest data",
-            "coverage metrics",
-            "format_data()",
-            "sort_imports",
-            "lint_code",
-            "type_hinting",
-            "pre-commit checks"
-        ];
+<section>
+  <h2>About Me</h2>
+  <p>
+    Python and Django developer with 8+ years of IT experience.
+    I build secure, scalable backend systems, automation tools,
+    and production-ready web applications.
+  </p>
+</section>
 
-        const fontSize = 16;
-        let columns = Math.floor(canvas.width / fontSize);
-        let drops = Array(columns).fill(1);
+<section>
+  <h2>Projects</h2>
 
-        function drawRain() {
-            ctx.fillStyle = "rgba(2, 6, 23, 0.08)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.font = `bold ${fontSize}px 'Courier New', monospace`;
+  <div class="project">
+    <a href="https://github.com/Paul-Shirunga/support-desk" target="_blank">
+      Support Desk – Django Ticketing System
+    </a>
+    <p>
+      Django-based ticketing system with authentication,
+      role-based access, and structured ticket workflows.
+    </p>
+  </div>
 
-            for (let i = 0; i < drops.length; i++) {
-                const text = python[Math.floor(Math.random() * python.length)];
-                ctx.shadowColor = "#38bdf8";
-                ctx.shadowBlur = 10;
-                ctx.fillStyle = "#7dd3fc";
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+</section>
 
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.95) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
-            }
-            ctx.shadowBlur = 0;
-        }
+<footer>
+  © 2026 Khomotjo Paul Shirunga
+</footer>
 
-        let animationId;
-        function animateRain() {
-            drawRain();
-            animationId = requestAnimationFrame(animateRain);
-        }
-        animateRain();
+<!-- PYTHON CODE RAIN SCRIPT -->
+<script>
+const canvas = document.getElementById("codeRain");
+const ctx = canvas.getContext("2d");
 
-        // ======================
-        // Revenue Data Table Logic
-        // ======================
-        const revenueData = [];
-        // Generate sample revenue data from $1,000 to $148,000
-        for (let i = 1; i <= 148; i++) {
-            revenueData.push({
-                id: i,
-                category: "Total Revenue",
-                value: `$${(i * 1000).toLocaleString()}`
-            });
-        }
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener("resize", resize);
 
-        let currentPage = 1;
-        let itemsPerPage = 20;
-        let filteredData = [...revenueData];
+// VERY VISIBLE PYTHON / DJANGO SNIPPETS
+const python = [
+  "def main():",
+  "class User(models.Model):",
+  "import django",
+  "from django.urls import path",
+  "return HttpResponse()",
+  "if request.method == 'POST':",
+  "for i in range():",
+  "while True:",
+  "try:",
+  "except Exception:",
+  "__init__",
+  "self.request",
+  "models.Model",
+  "views.py",
+  "urls.py",
+  "render(request)",
+  "QuerySet",
+  "print('Hello World')"
+];
 
-        // DOM Elements
-        const tableBody = document.getElementById('tableBody');
-        const pagination = document.getElementById('pagination');
-        const searchInput = document.getElementById('searchInput');
-        const itemsPerPageSelect = document.getElementById('itemsPerPage');
-        
-        // Update stats
-        document.getElementById('totalRecords').textContent = revenueData.length.toLocaleString();
-        document.getElementById('avgRevenue').textContent = `$${(revenueData.reduce((sum, item) => sum + parseInt(item.value.replace(/[$,]/g, '')), 0) / revenueData.length).toLocaleString('en-US', {maximumFractionDigits: 0})}`;
-        document.getElementById('minRevenue').textContent = revenueData[0].value;
-        document.getElementById('maxRevenue').textContent = revenueData[revenueData.length - 1].value;
+const fontSize = 20;
+let columns = Math.floor(canvas.width / fontSize);
+let drops = Array(columns).fill(0);
 
-        // Render Table
-        function renderTable() {
-            const startIndex = (currentPage - 1) * itemsPerPage;
-            const endIndex = startIndex + itemsPerPage;
-            const pageData = filteredData.slice(startIndex, endIndex);
-            
-            tableBody.innerHTML = '';
-            
-            pageData.forEach((item, index) => {
-                const actualIndex = startIndex + index + 1;
-                const value = parseInt(item.value.replace(/[$,]/g, ''));
-                const percentage = (value / 148000 * 100).toFixed(1);
-                
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${actualIndex}</td>
-                    <td>${item.category}</td>
-                    <td style="text-align: right; font-weight: 600; color: #38bdf8;">${item.value}</td>
-                    <td>
-                        <div style="background: rgba(30, 41, 59, 0.8); border-radius: 10px; height: 20px; overflow: hidden;">
-                            <div style="background: linear-gradient(90deg, #0ea5e9, #38bdf8); width: ${percentage}%; height: 100%; border-radius: 10px;"></div>
-                        </div>
-                        <div style="text-align: center; font-size: 0.8rem; margin-top: 5px; color: #94a3b8;">${percentage}%</div>
-                    </td>
-                `;
-                tableBody.appendChild(row);
-            });
-            
-            renderPagination();
-        }
+function draw() {
+  ctx.fillStyle = "rgba(2, 6, 23, 0.12)";  // slow fade
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Render Pagination
-        function renderPagination() {
-            const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-            pagination.innerHTML = '';
-            
-            // Previous button
-            const prevBtn = document.createElement('button');
-            prevBtn.className = 'page-btn';
-            prevBtn.textContent = '← Previous';
-            prevBtn.disabled = currentPage === 1;
-            prevBtn.addEventListener('click', () => {
-                if (currentPage > 1) {
-                    currentPage--;
-                    renderTable();
-                }
-            });
-            pagination.appendChild(prevBtn);
-            
-            // Page buttons
-            const maxVisiblePages = 5;
-            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-            
-            if (endPage - startPage + 1 < maxVisiblePages) {
-                startPage = Math.max(1, endPage - maxVisiblePages + 1);
-            }
-            
-            for (let i = startPage; i <= endPage; i++) {
-                const pageBtn = document.createElement('button');
-                pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
-                pageBtn.textContent = i;
-                pageBtn.addEventListener('click', () => {
-                    currentPage = i;
-                    renderTable();
-                });
-                pagination.appendChild(pageBtn);
-            }
-            
-            // Next button
-            const nextBtn = document.createElement('button');
-            nextBtn.className = 'page-btn';
-            nextBtn.textContent = 'Next →';
-            nextBtn.disabled = currentPage === totalPages;
-            nextBtn.addEventListener('click', () => {
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    renderTable();
-                }
-            });
-            pagination.appendChild(nextBtn);
-            
-            // Page info
-            const infoSpan = document.createElement('span');
-            infoSpan.style.cssText = 'color: #94a3b8; margin-left: 1rem; align-self: center;';
-            infoSpan.textContent = `Showing ${Math.min(filteredData.length, (currentPage - 1) * itemsPerPage + 1)}-${Math.min(filteredData.length, currentPage * itemsPerPage)} of ${filteredData.length.toLocaleString()} records`;
-            pagination.appendChild(infoSpan);
-        }
+  ctx.font = `bold ${fontSize}px monospace`;
 
-        // Search functionality
-        searchInput.addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            filteredData = revenueData.filter(item => 
-                item.category.toLowerCase().includes(searchTerm) ||
-                item.value.toLowerCase().includes(searchTerm)
-            );
-            currentPage = 1;
-            renderTable();
-        });
+  for (let i = 0; i < drops.length; i++) {
+    const text = python[Math.floor(Math.random() * python.length)];
 
-        // Items per page
-        itemsPerPageSelect.addEventListener('change', function() {
-            itemsPerPage = parseInt(this.value);
-            currentPage = 1;
-            renderTable();
-        });
+    ctx.shadowColor = "#38bdf8";
+    ctx.shadowBlur = 15;
+    ctx.fillStyle = "#7dd3fc";
 
-        // Initialize
-        renderTable();
+    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
-        // Performance optimization for background animation
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden) {
-                cancelAnimationFrame(animationId);
-            } else {
-                animateRain();
-            }
-        });
-    </script>
+    if (drops[i] * fontSize > canvas.height && Math.random() > 0.96) {
+      drops[i] = 0;
+    }
+    drops[i]++;
+  }
+
+  ctx.shadowBlur = 0;
+}
+
+setInterval(draw, 35); // speed of rain
+</script>
+
 </body>
 </html>
