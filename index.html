@@ -6,82 +6,119 @@
 <title>Khomotjo Paul Shirunga | Python Django Developer</title>
 
 <style>
+  :root {
+    --primary: #38bdf8;
+    --bg-dark: #020617;
+    --glass: rgba(15, 23, 42, 0.65);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
   html, body {
     margin: 0;
     padding: 0;
-    height: 100%;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Segoe UI", Arial, sans-serif;
     color: #e5e7eb;
-    background: #020617;
+    background: radial-gradient(circle at top, #020617, #000);
     overflow-x: hidden;
   }
 
+  /* CANVAS */
   canvas {
     position: fixed;
-    top: 0;
-    left: 0;
-    z-index: -1;
+    inset: 0;
+    z-index: -2;
   }
 
+  /* HERO */
   header {
-    padding: 100px 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
+    padding: 40px;
   }
 
   header h1 {
-    font-size: 2.8rem;
-    margin-bottom: 10px;
+    font-size: 3.2rem;
+    margin: 0;
+    background: linear-gradient(90deg, #fff, var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   header p {
     font-size: 1.2rem;
+    margin-top: 10px;
     color: #cbd5f5;
   }
 
   .btn {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 12px 26px;
-    background: #38bdf8;
+    margin-top: 30px;
+    padding: 14px 30px;
+    border-radius: 30px;
+    background: linear-gradient(135deg, var(--primary), #0ea5e9);
     color: #020617;
     font-weight: bold;
-    border-radius: 8px;
     text-decoration: none;
+    transition: transform 0.3s, box-shadow 0.3s;
   }
 
+  .btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 30px rgba(56,189,248,0.6);
+  }
+
+  /* SECTIONS */
   section {
     max-width: 1000px;
-    margin: auto;
-    padding: 60px 20px;
-    background: rgba(2, 6, 23, 0.75);
-    border-radius: 12px;
-    margin-bottom: 40px;
+    margin: 80px auto;
+    padding: 40px;
+    background: var(--glass);
+    border-radius: 20px;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 0 40px rgba(0,0,0,0.6);
+    animation: fadeUp 1s ease forwards;
   }
 
   h2 {
-    color: #38bdf8;
-  }
-
-  .skills span {
-    display: inline-block;
-    background: #1e293b;
-    padding: 8px 14px;
-    margin: 6px;
-    border-radius: 6px;
-    font-size: 0.9rem;
-  }
-
-  .project {
-    background: #020617;
-    padding: 20px;
-    border-radius: 10px;
+    color: var(--primary);
     margin-bottom: 20px;
+  }
+
+  /* PROJECTS */
+  .project {
+    padding: 20px;
+    border-radius: 14px;
+    background: rgba(2,6,23,0.9);
+    margin-bottom: 20px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .project:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 0 30px rgba(56,189,248,0.4);
+  }
+
+  .project a {
+    color: var(--primary);
+    font-weight: bold;
+    text-decoration: none;
   }
 
   footer {
     text-align: center;
-    padding: 30px;
+    padding: 40px;
     color: #94a3b8;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 </style>
 </head>
@@ -99,21 +136,24 @@
 <section>
   <h2>About Me</h2>
   <p>
-    Python and Django developer with 8+ years of IT experience, focused on
-    backend systems, automation, and real-world applications.
+    Python and Django developer with 8+ years of IT experience.
+    I build scalable backend systems, automation tools, and production-ready web applications.
   </p>
 </section>
 
 <section>
   <h2>Projects</h2>
+
   <div class="project">
-    <h3>
-      <a href="https://github.com/Paul-Shirunga/support-desk" target="_blank">
-        Support Desk – Django Ticketing System
-      </a>
-    </h3>
-    <p>Django-based ticketing system with authentication and workflows.</p>
+    <a href="https://github.com/Paul-Shirunga/support-desk" target="_blank">
+      Support Desk – Django Ticketing System
+    </a>
+    <p>
+      Django-based ticketing system with authentication, role-based access,
+      and structured ticket workflows.
+    </p>
   </div>
+
 </section>
 
 <footer>
@@ -124,18 +164,17 @@
 const canvas = document.getElementById("codeRain");
 const ctx = canvas.getContext("2d");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener("resize", resize);
 
-const pythonSnippets = [
-  "def", "class", "import", "from", "return",
-  "if", "else", "elif", "for", "while",
-  "True", "False", "None",
-  "print()", "len()", "range()",
-  "self", "__init__", "request", "response",
-  "models.Model", "views.py", "urls.py",
-  "render()", "HttpResponse", "QuerySet",
-  "try:", "except:", "finally:"
+const python = [
+  "def","class","import","return","if","else","elif","for","while",
+  "True","False","None","self","__init__","print()","range()",
+  "models.Model","views.py","urls.py","render()","HttpResponse"
 ];
 
 const fontSize = 16;
@@ -143,30 +182,21 @@ const columns = Math.floor(canvas.width / fontSize);
 const drops = Array(columns).fill(1);
 
 function draw() {
-  ctx.fillStyle = "rgba(2, 6, 23, 0.15)";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "rgba(2,6,23,0.25)";
+  ctx.fillRect(0,0,canvas.width,canvas.height);
 
   ctx.fillStyle = "#38bdf8";
   ctx.font = fontSize + "px monospace";
 
-  for (let i = 0; i < drops.length; i++) {
-    const text = pythonSnippets[Math.floor(Math.random() * pythonSnippets.length)];
-    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-      drops[i] = 0;
-    }
-
+  drops.forEach((y, i) => {
+    const text = python[Math.floor(Math.random() * python.length)];
+    ctx.fillText(text, i * fontSize, y * fontSize);
+    if (y * fontSize > canvas.height && Math.random() > 0.98) drops[i] = 0;
     drops[i]++;
-  }
+  });
 }
 
-setInterval(draw, 50);
-
-window.addEventListener("resize", () => {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-});
+setInterval(draw, 45);
 </script>
 
 </body>
