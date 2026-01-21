@@ -1,147 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Khomotjo Paul Shirunga | Python Django Developer</title>
-  <meta name="description" content="Python and Django Developer portfolio showcasing projects, skills, and experience."/>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
-      line-height: 1.6;
-    }
-    header {
-      padding: 80px 20px;
-      text-align: center;
-      background: linear-gradient(135deg, #1e293b, #020617);
-    }
-    header h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-    }
-    header p {
-      font-size: 1.2rem;
-      color: #cbd5f5;
-    }
-    section {
-      max-width: 1000px;
-      margin: auto;
-      padding: 60px 20px;
-    }
-    h2 {
-      color: #38bdf8;
-      margin-bottom: 20px;
-    }
-    .skills span {
-      display: inline-block;
-      background: #1e293b;
-      padding: 8px 14px;
-      margin: 6px;
-      border-radius: 6px;
-      font-size: 0.9rem;
-    }
-    .project {
-      background: #020617;
-      padding: 20px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-    }
-    footer {
-      text-align: center;
-      padding: 30px;
-      background: #020617;
-      color: #94a3b8;
-    }
-    a {
-      color: #38bdf8;
-      text-decoration: none;
-    }
-    .btn {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 12px 24px;
-      background: #38bdf8;
-      color: #020617;
-      font-weight: bold;
-      border-radius: 8px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khomotjo Paul Shirunga | Python Django Developer</title>
+
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #e5e7eb;
+    background: #020617;
+    overflow-x: hidden;
+  }
+
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+
+  header {
+    padding: 100px 20px;
+    text-align: center;
+  }
+
+  header h1 {
+    font-size: 2.8rem;
+    margin-bottom: 10px;
+  }
+
+  header p {
+    font-size: 1.2rem;
+    color: #cbd5f5;
+  }
+
+  .btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 26px;
+    background: #38bdf8;
+    color: #020617;
+    font-weight: bold;
+    border-radius: 8px;
+    text-decoration: none;
+  }
+
+  section {
+    max-width: 1000px;
+    margin: auto;
+    padding: 60px 20px;
+    background: rgba(2, 6, 23, 0.75);
+    border-radius: 12px;
+    margin-bottom: 40px;
+  }
+
+  h2 {
+    color: #38bdf8;
+  }
+
+  .skills span {
+    display: inline-block;
+    background: #1e293b;
+    padding: 8px 14px;
+    margin: 6px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+  }
+
+  .project {
+    background: #020617;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+  }
+
+  footer {
+    text-align: center;
+    padding: 30px;
+    color: #94a3b8;
+  }
+</style>
 </head>
+
 <body>
+
+<canvas id="codeRain"></canvas>
 
 <header>
   <h1>Khomotjo Paul Shirunga</h1>
   <p>Python & Django Developer | IT Professional</p>
-
-  <a href="cv.pdf" target="_blank" class="btn">
-    Download CV
-  </a>
+  <a href="cv.pdf" class="btn" target="_blank">Download CV</a>
 </header>
 
 <section>
   <h2>About Me</h2>
   <p>
-    I am a Python and Django developer with over 8 years of IT experience.
-    I specialize in building secure, scalable backend systems and real-world
-    applications such as ticketing systems, automation tools, and internal web platforms.
+    Python and Django developer with 8+ years of IT experience, focused on
+    backend systems, automation, and real-world applications.
   </p>
 </section>
 
 <section>
-  <h2>Skills</h2>
-  <div class="skills">
-    <span>Python</span>
-    <span>Django</span>
-    <span>Django REST Framework</span>
-    <span>HTML</span>
-    <span>CSS</span>
-    <span>Bootstrap</span>
-    <span>SQLite</span>
-    <span>PostgreSQL</span>
-    <span>Git</span>
-    <span>GitHub</span>
-    <span>Linux</span>
-    <span>Windows Server</span>
-  </div>
-</section>
-
-<section>
   <h2>Projects</h2>
-
   <div class="project">
     <h3>
       <a href="https://github.com/Paul-Shirunga/support-desk" target="_blank">
         Support Desk – Django Ticketing System
       </a>
     </h3>
-    <p>
-      A full-stack Django-based ticketing system featuring user authentication,
-      role-based access control, ticket workflows, and status tracking dashboards.
-    </p>
+    <p>Django-based ticketing system with authentication and workflows.</p>
   </div>
-
-  <div class="project">
-    <h3>IT Automation Scripts</h3>
-    <p>
-      Python scripts designed to automate backups, system health checks,
-      and routine IT administrative tasks.
-    </p>
-  </div>
-
-</section>
-
-<section>
-  <h2>Contact</h2>
-  <p>Email: <a href="mailto:khomotjopaull@gmail.com">khomotjopaull@gmail.com</a></p>
-  <p>Phone: 065 850 4425</p>
 </section>
 
 <footer>
   © 2026 Khomotjo Paul Shirunga
 </footer>
+
+<script>
+const canvas = document.getElementById("codeRain");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const pythonSnippets = [
+  "def", "class", "import", "from", "return",
+  "if", "else", "elif", "for", "while",
+  "True", "False", "None",
+  "print()", "len()", "range()",
+  "self", "__init__", "request", "response",
+  "models.Model", "views.py", "urls.py",
+  "render()", "HttpResponse", "QuerySet",
+  "try:", "except:", "finally:"
+];
+
+const fontSize = 16;
+const columns = Math.floor(canvas.width / fontSize);
+const drops = Array(columns).fill(1);
+
+function draw() {
+  ctx.fillStyle = "rgba(2, 6, 23, 0.15)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "#38bdf8";
+  ctx.font = fontSize + "px monospace";
+
+  for (let i = 0; i < drops.length; i++) {
+    const text = pythonSnippets[Math.floor(Math.random() * pythonSnippets.length)];
+    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+      drops[i] = 0;
+    }
+
+    drops[i]++;
+  }
+}
+
+setInterval(draw, 50);
+
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
 
 </body>
 </html>
